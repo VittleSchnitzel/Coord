@@ -10,6 +10,7 @@ import java.util.Random;
 /**
  * An all-purpose class for storing useful coordinate-related functions: <b>(x,y)</b>
  * <p>Also can be used for imaginary numbers: <b>x+y<i>i</i></b></p>
+ * however this functionality will be put into a separate class soon
  */
 public class Crd {
     static double E = Math.E;
