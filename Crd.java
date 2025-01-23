@@ -13,8 +13,8 @@ import java.util.Random;
  * however this functionality will be put into a separate class soon
  */
 public class Crd {
-    static double E = Math.E;
-    static double PI = Math.PI;
+    final static double E = Math.E;
+    final static double PI = Math.PI;
     /**
      * <b>X</b> value of a coordinate
      * <p><b>Real</b> part of an imaginary number</p>
@@ -108,7 +108,7 @@ public class Crd {
      */
     static public Crd random(double maxX, double maxY) {
         Crd r = Crd.random();
-        r = r.scaleX(maxX).scaleY(maxY);
+        r = r.multX(maxX).multY(maxY);
         return r;
     }
 
@@ -130,6 +130,15 @@ public class Crd {
         return ret;
     }
 
+    /**
+     * Uses the random number generator to update this Coord to the next Random Coordinate
+     * @param r the random number generator
+     * @param maxX the limit of the possible <b>x</b> values
+     * @param maxY the limit of the possible <b>y</b> values
+     * @return a psuedorandom coordinate in the range of <b>[0,<i>maxX</i>)</b>x<b>[0,<i>maxY</i>)</b>
+     * @see #random()
+     * @see #randomNeg(double)
+     */
     public void nextRandom(Random r, double maxX, double maxY) {
         Crd ret = randomSeed(r, maxX, maxY);
         x = ret.x;
@@ -158,7 +167,7 @@ public class Crd {
     }
 
     /**
-     *
+     * This Coordinate as a String
      * @return the ordered set representation of the Coordinate
      */
     @Override
@@ -167,58 +176,63 @@ public class Crd {
     }
 
     /**
-     *
-     * @return
+     * This Complex Number as a String
+     * @return the Complex Number representation of the Coordinate
      */
     public String toStringI() {
         return x+"+"+y+"i";
     }
 
     /**
-     *
+     *  Quick method to print out the Coord to the Console
+     * @see #printI()
      */
     public void print() {
         System.out.println(this);
     }
 
     /**
-     *
+     *  Quick method to print out the Complex Number to the Console
+     * @see #print()
      */
     public void printI() {
         System.out.println(toStringI());
     }
 
     /**
-     *
-     * @param g
+     *  Quick method to draw a Coordinate on to a Graphics Object
+     * @param g the Graphics Object that will paint the Coord
+     * @see #draw(Graphics, Color, double)
      */
     public void draw(Graphics g) {
         draw(g,Color.black);
     }
 
     /**
-     *
-     * @param g
-     * @param size
+     * Quick method to draw a Coordinate on to a Graphics Object
+     * @param g the Graphics Object that will paint the Coord
+     * @param size the Size of the dot the will be painted
+     * @see #draw(Graphics, Color, double)
      */
     public void draw(Graphics g, double size) {
         draw(g,Color.black,size);
     }
 
     /**
-     *
-     * @param g
-     * @param c
+     * Quick method to draw a Coordinate on to a Graphics Object
+     * @param g the Graphics Object that will paint the Coord
+     * @param c the Color that the dot will be painted as
+     * @see #draw(Graphics, Color, double)
      */
     public void draw(Graphics g, Color c) {
         draw(g,c,1);
     }
 
     /**
-     *
-     * @param g
-     * @param c
-     * @param size
+     * Quick method to draw a Coordinate on to a Graphics Object
+     * @param g the Graphics Object that will paint the Coord
+     * @param c the Color that the dot will be painted as
+     * @param size the Size of the dot the will be painted
      */
     public void draw(Graphics g, Color c, double size) {
         g.setColor(c);
@@ -246,25 +260,25 @@ public class Crd {
     }
 
     /**
-     *
-     * @return
+     * Negates just the X value of the Coord
+     * @return This coord, but with a negative X value
      */
     public Crd negX() {
         return new Crd(-x,y);
     }
 
     /**
-     *
-     * @return
+     * Negates just the Y value of the Coord
+     * @return This coord, but with a negative Y value
      */
     public Crd negY() {
         return new Crd(x,-y);
     }
 
     /**
-     *
-     * @param X
-     * @return
+     * Adds to just the X value
+     * @param X the additional value to be added to x
+     * @return this coord, but with an adjusted x value
      */
     public Crd addX(double X) {
         Crd r = new Crd(x+X,y);
@@ -272,9 +286,9 @@ public class Crd {
     }
 
     /**
-     *
-     * @param Y
-     * @return
+     *Adds to just the Y value
+     * @param Y the additional value to be added to y
+     * @return this coord, but with an adjusted y value
      */
     public Crd addY(double Y) {
         Crd r = new Crd(x,y+Y);
@@ -286,7 +300,7 @@ public class Crd {
      * @param a
      * @return
      */
-    public Crd scaleX(double a) {
+    public Crd multX(double a) {
         return new Crd(x*a,y);
     }
 
@@ -295,7 +309,7 @@ public class Crd {
      * @param a
      * @return
      */
-    public Crd scaleY(double a) {
+    public Crd multY(double a) {
         return new Crd(x,y*a);
     }
 
@@ -383,7 +397,7 @@ public class Crd {
      * @param a
      * @return
      */
-    public Crd scale(double a) {
+    public Crd mult(double a) {
         return new Crd(x*a,y*a);
     }
 
@@ -413,9 +427,9 @@ public class Crd {
      *
      * @return
      */
-    public Crd unitScale() {
+    public Crd unit() {
         if (this==new Crd()) {return new Crd();}
-        return scale(1/dist());
+        return mult(1/dist());
     }
 
     /**
@@ -547,7 +561,7 @@ public class Crd {
      * @param z
      * @return
      */
-    public Crd mult(Crd z) {
+    public Crd multC(Crd z) {
         return new Crd(x*z.x-y*z.y,x*z.y+y*z.x);
     }
 
@@ -592,57 +606,9 @@ public class Crd {
     public Crd sin() {
         Crd theta = multI(1);
         theta = theta.e().add(theta.neg().e().neg());
-        return theta.scale(-0.5).multI(1);
+        return theta.mult(-0.5).multI(1);
     }
 
-    /**
-     *
-     * @return
-     */
-    public Crd cos() {
-        Crd theta = multI(1);
-        theta = theta.e().add(theta.neg().e());
-        return theta.scale(0.5);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Crd tan() {
-        return sin().mult(cos().inv());
-    }
-
-    /**
-     *
-     * @param z
-     * @return
-     */
-    public Crd pow(Crd z) {
-        double mag = Math.pow(E, z.x*Math.log(dist())-z.y*angle());
-        double theta = z.x*angle()+z.y*Math.log(dist());
-        return new Crd(mag*Math.cos(theta), mag*Math.sin(theta));
-    }
-
-    /**
-     *
-     * @param re
-     * @return
-     */
-    public Crd powR(double re) {
-        double theta = angle()*re;
-        double d = Math.pow(dist(), re);
-        return polar(d, theta);
-    }
-
-    /**
-     *
-     * @param im
-     * @return
-     */
-    public Crd powI(double im) {
-        return new Crd(Math.pow(E,angle()*im)*Math.cos(im*Math.log(dist())),Math.pow(E, angle()*im)*Math.sin(im*Math.log(dist())));
-    }
 
     //------------------------------------------------------------------------------------------------------------------
     // Vector Manipulators
@@ -664,7 +630,7 @@ public class Crd {
      * @return
      */
     public Crd vecFlat(Crd b) {
-        return scale(dot(b)/Math.pow(dist(),2));
+        return mult(dot(b)/Math.pow(dist(),2));
     }
 
     // returns this aligned to OmniLibrary.Coord b and the axis, maintaining the distance from the axis
@@ -767,7 +733,7 @@ public class Crd {
      * @return
      */
     public Crd lerp(Crd b, double t) {
-        return scale(1-t).add(b.scale(t));
+        return mult(1-t).add(b.mult(t));
     }
 
     /**
